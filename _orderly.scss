@@ -1,3 +1,14 @@
+/*----------------------------------------------------------------------*
+
+	orderly
+	v.1.0
+	https://github.com/thomhines/orderly
+
+*----------------------------------------------------------------------*/
+
+
+
+
 
 // SETTINGS
 //----------------------------------------------------------------------
@@ -9,29 +20,28 @@ $gutter: 30px !default;
 
 
 // Responsive breakpoints
+$xs: 420px !default;
 $sm: 568px !default;
 $md: 768px !default;
 $lg: 1024px !default;
 $xl: 1280px !default;
 
 
-// At which size/breakpoint should the layout become fluid?
-$go_to_fluid: $lg !default;
-
-
-// At which size/breakpoint should the columns stack on top of one another?
-$go_to_single_column: $sm !default;
-
-
 // Enable/disable default breakpoints
 // Nutshell: Container becomes fluid below $lg screen size and columns are full width below $md screen size
 $auto_break: true !default;
 
+// The size/breakpoint at which the layout should become fluid
+$go_to_fluid: $lg !default;
+
+// At which size/breakpoint should the columns stack on top of one another?
+$go_to_single_column: $sm !default;
 
 // Enable/disable HTML class names
 // Nutshell: If you prefer to control your columns from within your SCSS files, disabling this will
 // keep your output CSS much smaller
 $enable_helper_classes: false !default;
+
 
 
 // HELPER FUNCTIONS
@@ -62,13 +72,14 @@ $enable_helper_classes: false !default;
 // Sets container properties
 @mixin container($width: $container_width, $breakpoint: false) {
 
-
 	@if $breakpoint {
 		@media screen and (max-width: $breakpoint) {
 			width: $width + $gutter;
 			margin: auto;
 		}
-	} @else {
+	} 
+	
+	@else {
 		width: $width + $gutter;
 		margin: auto;
 		
@@ -88,8 +99,6 @@ $enable_helper_classes: false !default;
 		display: table;
 		clear: both;
 	}
-	
-
 }
 
 
@@ -103,7 +112,9 @@ $enable_helper_classes: false !default;
 			@if $width >= 1 { width: $width/$total_columns * 100%; }
 			@else { width: $width * 100%; }
 		}
-	} @else {
+	} 
+	
+	@else {
 		@if $width >= 1 { width: $width/$total_columns * 100%; }
 		@else { width: $width * 100%; }
 		
@@ -115,14 +126,22 @@ $enable_helper_classes: false !default;
 	}
 }
 
+// Swaps the position of this column with the column that comes after it in your HTML
+@mixin swap {
+	float: right;	
+}
+
 // Adds margin to left of column
-@mixin push($width: 1, $breakpoint: false) {
+@mixin push-left($width: 1, $breakpoint: false) {
+
 	@if $breakpoint {
 		@media screen and (max-width: getBreakpointValue($breakpoint)) {
 			@if $width >= 1 { margin-left: $width/$total_columns * 100%; }
 			@else { margin-left: $width * 100%; }
 		}
-	} @else {
+	} 
+	
+	@else {
 		@if $width >= 1 { margin-left: $width/$total_columns * 100%; }
 		@else { margin-left: $width * 100%; }
 		
@@ -136,12 +155,15 @@ $enable_helper_classes: false !default;
 
 // Adds margin to right of column
 @mixin push-right($width: 1, $breakpoint: false) {
+
 	@if $breakpoint {
 		@media screen and (max-width: getBreakpointValue($breakpoint)) {
 			@if $width >= 1 { margin-right: $width/$total_columns * 100%; }
 			@else { margin-right: $width * 100%; }
 		}
-	} @else {
+	}
+	
+	@else {
 		@if $width >= 1 { margin-right: $width/$total_columns * 100%; }
 		@else { margin-right: $width * 100%; }
 		
@@ -153,7 +175,7 @@ $enable_helper_classes: false !default;
 	}	
 }
 
-// Sets row properties
+// Encloses columns in a wrapper prevent other columns from sitting on the same line
 @mixin row() {
 	clear:  both;
 	&:after {		
@@ -164,9 +186,10 @@ $enable_helper_classes: false !default;
 }
 
 
+// If helper classes are enabled, load 'em in
 @if $enable_helper_classes { @import 'orderly-helper-classes'; }
 
 
-// Use border-box to keep all contents inside width of containers
+// Use border-box to keep everything lined up
 * {-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;}
 

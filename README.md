@@ -1,10 +1,9 @@
 orderly
 =======
 
-The world's best, easiest, most flexible grid system.
+**The world's best, easiest, most flexible grid system.**
 
-
-Check out this editable [demo]() on CodePen to try it out.
+Check out this editable [demo](http://codepen.io/thomhines/pen/iIKcH) on CodePen to try it out.
 
 
 ## Features
@@ -22,7 +21,7 @@ Check out this editable [demo]() on CodePen to try it out.
 
 
 
-## How to Use - The Easy Way
+## How to Use: The Easy Way
 
 	.container {
 		@include container();
@@ -56,7 +55,7 @@ The default grid is 12 grid-units wide.
 ### Settings
 
 
-To adjust any of these settings, just set them to the value you would like *before* you include orderly in your SCSS file.
+To adjust any of the default settings, just add the setting name and set it to the value you would like *before* you include orderly in your SCSS file.
 
 For example:
 	
@@ -64,6 +63,7 @@ For example:
 	$total_width: 800px;
 	$gutter: 15px;
 	@import 'orderly';
+
 
 
 #### $total_width
@@ -105,13 +105,13 @@ default: $lg
 
 
 
-
 #### $go_to_single_column
 *The size/breakpoint at which columns should stack on top of one another*
 
 **NOTE**: This value only works when $auto_responsive is set to true.
 
 default: $sm
+
 
 
 #### $enable_helper_classes
@@ -126,22 +126,20 @@ default: false
 
 #### Responsive Breakpoints
 
-$xs
-default: 420px;
+##### $xs
+default: 420px
 
-$sm
-default: 568px;
+##### $sm
+default: 568px
 
-$md
-default: 768px;
+##### $md
+default: 768px
 
-$lg
-default: 1024px;
+##### $lg
+default: 1024px
 
-$xl
-default: 1280px;
-
-
+##### $xl
+default: 1280px
 
 
 
@@ -150,7 +148,9 @@ default: 1280px;
 
 
 
-### API
+
+
+## API -or- REAL POWER
 
 
 
@@ -235,6 +235,20 @@ $breakpoint: sets number of columns when stated breakpoint is reached
 *Encloses columns in a wrapper prevent other columns from sitting on the same line*
 
 
+#### hide
+*Hides an element at a certain breakpoint*
+
+	div {
+		@include hide('sm');
+	}
+
+
+#### show
+*Displays an element at a certain breakpoint*
+
+	div {
+		@include show('sm');
+	}
 
 
 ### Other Notes

@@ -186,6 +186,19 @@ $enable_helper_classes: false !default;
 }
 
 
+@mixin hide($breakpoint) {
+	@media screen and (max-width: getBreakpointValue($breakpoint)) {
+		display: none; 
+	}
+}
+
+@mixin show($breakpoint) {
+	@media screen and (max-width: getBreakpointValue($breakpoint)) {
+		display: block; 
+	}
+}
+
+
 // If helper classes are enabled, load 'em in
 @if $enable_helper_classes { @import 'orderly-helper-classes'; }
 

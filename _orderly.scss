@@ -1,8 +1,11 @@
 /*----------------------------------------------------------------------*
 
-	orderly
-	v.1.0
-	https://github.com/thomhines/orderly
+orderly
+v.1.0
+https://github.com/thomhines/orderly
+
+created by Thom Hines
+MIT License
 
 *----------------------------------------------------------------------*/
 
@@ -16,7 +19,7 @@
 // Grid values
 $container_width: 1024px !default;
 $total_columns: 12 !default;
-$gutter: 30px !default;
+$gutter: 0px !default;
 
 
 // Responsive breakpoints
@@ -34,6 +37,9 @@ $auto_break: true !default;
 // The size/breakpoint at which the layout should become fluid
 $go_to_fluid: $lg !default;
 
+// The size/breakpoint at which the layout should become fluid
+$fluid_width: 90% !default;
+
 // At which size/breakpoint should the columns stack on top of one another?
 $go_to_single_column: $sm !default;
 
@@ -49,20 +55,13 @@ $enable_helper_classes: false !default;
 
 // Returns value of breakpoint
 @function getBreakpointValue($name) {
-	@if $name == 'sm' { @return $sm; }
+	@if $name == 'xs' { @return $xs; }
+	@else if $name == 'sm' { @return $sm; }
 	@else if $name == 'md' { @return $md; }
 	@else if $name == 'lg' { @return $lg; }
-	@else { @return $xl; }
+	@else if $name == 'xl' { @return $xl; }
+	@else { @return $name; }
 }
-
-// Returns name of breakpoint
-@function getBreakpointName($val) {
-	@if $val == $sm { @return 'sm'; }
-	@else if $val == $md { @return 'md'; }
-	@else if $val == $lg { @return 'lg'; }
-	@else { @return 'xl'; }
-}
-
 
 
 
@@ -73,7 +72,7 @@ $enable_helper_classes: false !default;
 @mixin container($width: $container_width, $breakpoint: false) {
 
 	@if $breakpoint {
-		@media screen and (max-width: $breakpoint) {
+		@media screen and (max-width: getBreakpointValue($breakpoint)) {
 			width: $width + $gutter;
 			margin: auto;
 		}
@@ -86,7 +85,7 @@ $enable_helper_classes: false !default;
 		@if $auto_break {
 			@if $breakpoint == false {
 				@media screen and (max-width: $go_to_fluid) {
-					width: 100%;
+					width: $fluid_width;
 					padding: 0 0 0 $gutter;
 				}
 			}
@@ -197,10 +196,6 @@ $enable_helper_classes: false !default;
 		display: block; 
 	}
 }
-
-
-// If helper classes are enabled, load 'em in
-@if $enable_helper_classes { @import 'orderly-helper-classes'; }
 
 
 // Use border-box to keep everything lined up

@@ -10,7 +10,7 @@ Check out this editable [demo](http://codepen.io/thomhines/pen/iIKcH) on CodePen
 
 - Uses both a grid-unit or fraction-based grid system. This means you can set a column to 1/4th the width of the container **OR** 3 grid-units wide of a 12-column grid, and end up with the same column! Plus, you can mix and match your units as much as you want.
 
-- Built with Sass to automate the heavy lifting and to keep your CSS clean and light.
+- Built with Sass to automate the heavy lifting - keeping your HTML semantic and your CSS clean and light.
 
 - Simple mixins make it a snap to control grid settings, even accross multiple responsive breakpoints.
 
@@ -23,29 +23,48 @@ Check out this editable [demo](http://codepen.io/thomhines/pen/iIKcH) on CodePen
 
 ## How to Use: The Easy Way
 
-	.container {
+HTML:
+
+	<body>
+		<div class="sidebar">
+			<h1>Sidebar Content</h1>
+		</div>
+		<div class="main">
+			<h1>Main Content</h1>
+		</div>
+	</body>
+
+
+SCSS:
+
+	body {
 		@include container();
 	}
 
-	.column {
-		@include column(1/3);
+	.sidebar {
+		@include column(1/4);
+	}
+	
+	.main {
+		@include column(3/4);
+		
 	}
 
 or
 
-	.column {
-		@include column(.333);
+	.main {
+		@include column(.75);
 	}
 
 or
 
-	.column {
-		@include column(4);
+	.main {
+		@include column(9);
 	}
 
 
 
-If you use whole numbers and default settings, orderly assumes you are setting the width of your column in grid-units. Otherwise, it will assume that the column should is a fraction of the total width of the container. 
+If you use whole numbers and default settings, orderly assumes you are setting the width of your column in grid-units. Otherwise, it will assume that the column width you set is a fraction of the total width of the container. 
 
 The default grid is 12 grid-units wide.
 

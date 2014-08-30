@@ -10,9 +10,6 @@ MIT License
 *----------------------------------------------------------------------*/
 
 
-
-
-
 // SETTINGS
 //----------------------------------------------------------------------
 
@@ -35,13 +32,13 @@ $xl: 1280px !default;
 $auto_break: true !default;
 
 // The size/breakpoint at which the layout should become fluid
-$go_to_fluid: $lg !default;
+$go_to_fluid_breakpoint: $lg !default;
 
 // The size/breakpoint at which the layout should become fluid
 $fluid_width: 90% !default;
 
 // At which size/breakpoint should the columns stack on top of one another?
-$go_to_single_column: $sm !default;
+$go_to_single_column_breakpoint: $sm !default;
 
 // Enable/disable HTML class names
 // Nutshell: If you prefer to control your columns from within your SCSS files, disabling this will
@@ -84,7 +81,7 @@ $enable_helper_classes: false !default;
 		
 		@if $auto_break {
 			@if $breakpoint == false {
-				@media screen and (max-width: $go_to_fluid) {
+				@media screen and (max-width: $go_to_fluid_breakpoint) {
 					width: $fluid_width;
 					padding: 0 0 0 $gutter;
 				}
@@ -99,6 +96,7 @@ $enable_helper_classes: false !default;
 		clear: both;
 	}
 }
+
 
 
 // Sets column properties
@@ -118,17 +116,21 @@ $enable_helper_classes: false !default;
 		@else { width: $width * 100%; }
 		
 		@if $auto_break {
-			@media screen and (max-width: $go_to_single_column) {
+			@media screen and (max-width: $go_to_single_column_breakpoint) {
 				width: 100%;
 			}
 		}
 	}
 }
 
+
+
 // Swaps the position of this column with the column that comes after it in your HTML
 @mixin swap {
 	float: right;	
 }
+
+
 
 // Adds margin to left of column
 @mixin push-left($width: 1, $breakpoint: false) {
@@ -145,12 +147,14 @@ $enable_helper_classes: false !default;
 		@else { margin-left: $width * 100%; }
 		
 		@if $auto_break {
-			@media screen and (max-width: $go_to_single_column) {
+			@media screen and (max-width: $go_to_single_column_breakpoint) {
 				margin-left: 0;
 			}
 		}
 	}	
 }
+
+
 
 // Adds margin to right of column
 @mixin push-right($width: 1, $breakpoint: false) {
@@ -167,16 +171,18 @@ $enable_helper_classes: false !default;
 		@else { margin-right: $width * 100%; }
 		
 		@if $auto_break {
-			@media screen and (max-width: $go_to_single_column) {
+			@media screen and (max-width: $go_to_single_column_breakpoint) {
 				margin-right: 0;
 			}
 		}
 	}	
 }
 
+
+
 // Encloses columns in a wrapper prevent other columns from sitting on the same line
 @mixin row() {
-	clear:  both;
+	clear: both;
 	&:after {		
 		content: "";
 		display: table;
@@ -185,17 +191,23 @@ $enable_helper_classes: false !default;
 }
 
 
-@mixin hide($breakpoint) {
+
+// Hides content below a certain breakpoint
+@mixin hide($breakpoint: $go_to_single_column_breakpoint) {
 	@media screen and (max-width: getBreakpointValue($breakpoint)) {
 		display: none; 
 	}
 }
 
-@mixin show($breakpoint) {
+
+
+// Shows content below a certain breakpoint
+@mixin show($breakpoint: $go_to_single_column_breakpoint) {
 	@media screen and (max-width: getBreakpointValue($breakpoint)) {
 		display: block; 
 	}
 }
+
 
 
 // Use border-box to keep everything lined up

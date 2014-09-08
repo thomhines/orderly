@@ -102,7 +102,7 @@ $text_direction: 'ltr';
 	padding: 0 $gutter 0 0;
 
 	// Change direction of columns based on text direction
-	@if $direction == 'rtl' { float: right; }
+	@if $text_direction == 'rtl' { float: right; }
 	@else { float: left; }
 	
 	// Calculate width of column
@@ -131,7 +131,7 @@ $text_direction: 'ltr';
 // Swaps the position of this column with the column that comes after it in your HTML
 @mixin swap {
 	// This changes depending on the direction of the text
-	@if $direction == 'rtl' { float: left; }
+	@if $text_direction == 'rtl' { float: left; }
 	@else { float: right; }	
 }
 

@@ -26,7 +26,6 @@ $md: 768px !default;
 $lg: 1024px !default;
 $xl: 1280px !default;
 
-
 // Enable/disable default breakpoints
 // Nutshell: Container becomes fluid below $lg screen size and columns are full width below $md screen size
 $auto_break: true !default;
@@ -40,11 +39,8 @@ $fluid_width: 90% !default;
 // At which size/breakpoint should the columns stack on top of one another?
 $go_to_single_column_breakpoint: $sm !default;
 
-// Enable/disable HTML class names
-// Nutshell: If you prefer to control your columns from within your SCSS files, disabling this will
-// keep your output CSS much smaller
-$enable_helper_classes: false !default;
-
+// Sets direction of text content
+$text_direction: 'ltr';
 
 
 // HELPER FUNCTIONS
@@ -69,7 +65,7 @@ $enable_helper_classes: false !default;
 @mixin container($width: $container_width, $breakpoint: false) {
 
 	@if $breakpoint {
-		@media screen and (max-width: getBreakpointValue($breakpoint)) {
+		@media (max-width: getBreakpointValue($breakpoint)) {
 			width: $width + $gutter;
 			margin: auto;
 		}
@@ -81,7 +77,7 @@ $enable_helper_classes: false !default;
 		
 		@if $auto_break {
 			@if $breakpoint == false {
-				@media screen and (max-width: $go_to_fluid_breakpoint) {
+				@media (max-width: $go_to_fluid_breakpoint) {
 					width: $fluid_width;
 					padding: 0 0 0 $gutter;
 				}
@@ -101,19 +97,23 @@ $enable_helper_classes: false !default;
 
 // Sets column properties
 @mixin column($width: $total_columns, $breakpoint: false) {
-	float: left;
+
 	padding: 0 $gutter 0 0;
+
+	@if $direction == 'rtl' { float: right; }
+	@else { float: left; }
+	
+	@if unit($width) == '%' { $_width: $width; }
+	@else if $width >= 1 { $_width: $width/$total_columns * 100%; }
+	@else { $_width: $width * 100%; }
+	
 	
 	@if $breakpoint {
-		@media screen and (max-width: getBreakpointValue($breakpoint)) {
-			@if $width >= 1 { width: $width/$total_columns * 100%; }
-			@else { width: $width * 100%; }
+		@media (max-width: getBreakpointValue($breakpoint)) {
+			width: $_width;
 		}
-	} 
-	
-	@else {
-		@if $width >= 1 { width: $width/$total_columns * 100%; }
-		@else { width: $width * 100%; }
+	} @else {
+		width: $_width;
 		
 		@if $auto_break {
 			@media screen and (max-width: $go_to_single_column_breakpoint) {
@@ -127,7 +127,8 @@ $enable_helper_classes: false !default;
 
 // Swaps the position of this column with the column that comes after it in your HTML
 @mixin swap {
-	float: right;	
+	@if $direction == 'rtl' { float: left; }
+	@else { float: right; }	
 }
 
 
@@ -135,19 +136,21 @@ $enable_helper_classes: false !default;
 // Adds margin to left of column
 @mixin push-left($width: 1, $breakpoint: false) {
 
+	@if unit($width) == '%' { $margin-left: $width; }
+	@else if $width >= 1 { $margin-left: $width/$total_columns * 100%; }
+	@else { $margin-left: $width * 100%; }
+
 	@if $breakpoint {
-		@media screen and (max-width: getBreakpointValue($breakpoint)) {
-			@if $width >= 1 { margin-left: $width/$total_columns * 100%; }
-			@else { margin-left: $width * 100%; }
+		@media (max-width: getBreakpointValue($breakpoint)) {
+			margin-left: $margin-left;
 		}
 	} 
 	
 	@else {
-		@if $width >= 1 { margin-left: $width/$total_columns * 100%; }
-		@else { margin-left: $width * 100%; }
+		margin-left: $margin-left;
 		
 		@if $auto_break {
-			@media screen and (max-width: $go_to_single_column_breakpoint) {
+			@media (max-width: $go_to_single_column_breakpoint) {
 				margin-left: 0;
 			}
 		}
@@ -159,19 +162,21 @@ $enable_helper_classes: false !default;
 // Adds margin to right of column
 @mixin push-right($width: 1, $breakpoint: false) {
 
+	@if unit($width) == '%' { $margin-right: $width; }
+	@else if $width >= 1 { $margin-right: $width/$total_columns * 100%; }
+	@else { $margin-right: $width * 100%; }
+
 	@if $breakpoint {
-		@media screen and (max-width: getBreakpointValue($breakpoint)) {
-			@if $width >= 1 { margin-right: $width/$total_columns * 100%; }
-			@else { margin-right: $width * 100%; }
+		@media (max-width: getBreakpointValue($breakpoint)) {
+			margin-right: $margin-right;
 		}
 	}
 	
 	@else {
-		@if $width >= 1 { margin-right: $width/$total_columns * 100%; }
-		@else { margin-right: $width * 100%; }
+		margin-right: $margin-right;
 		
 		@if $auto_break {
-			@media screen and (max-width: $go_to_single_column_breakpoint) {
+			@media (max-width: $go_to_single_column_breakpoint) {
 				margin-right: 0;
 			}
 		}
@@ -191,10 +196,17 @@ $enable_helper_classes: false !default;
 }
 
 
+// Applies styles at specified breakpoint(s)
+@mixin breakpoint($min: $md, $max: false) {
+	@if $min and $max { @media (min-width: $min) and (max-width: $max) { @content } }
+	@else if $max { @media (max-width: $max) { @content } }
+	@else { @media (min-width: $min) { @content } }
+}
+
 
 // Hides content below a certain breakpoint
 @mixin hide($breakpoint: $go_to_single_column_breakpoint) {
-	@media screen and (max-width: getBreakpointValue($breakpoint)) {
+	@media (max-width: getBreakpointValue($breakpoint)) {
 		display: none; 
 	}
 }
@@ -203,7 +215,7 @@ $enable_helper_classes: false !default;
 
 // Shows content below a certain breakpoint
 @mixin show($breakpoint: $go_to_single_column_breakpoint) {
-	@media screen and (max-width: getBreakpointValue($breakpoint)) {
+	@media (max-width: getBreakpointValue($breakpoint)) {
 		display: block; 
 	}
 }

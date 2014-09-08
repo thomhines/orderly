@@ -86,6 +86,7 @@ $text_direction: 'ltr';
 		
 	}
 
+	// Add clearfix to make sure container holds all floated columns
 	&:after {		
 		content: "";
 		display: table;
@@ -100,9 +101,11 @@ $text_direction: 'ltr';
 
 	padding: 0 $gutter 0 0;
 
+	// Change direction of columns based on text direction
 	@if $direction == 'rtl' { float: right; }
 	@else { float: left; }
 	
+	// Calculate width of column
 	@if unit($width) == '%' { $_width: $width; }
 	@else if $width >= 1 { $_width: $width/$total_columns * 100%; }
 	@else { $_width: $width * 100%; }
@@ -127,6 +130,7 @@ $text_direction: 'ltr';
 
 // Swaps the position of this column with the column that comes after it in your HTML
 @mixin swap {
+	// This changes depending on the direction of the text
 	@if $direction == 'rtl' { float: left; }
 	@else { float: right; }	
 }
@@ -136,6 +140,7 @@ $text_direction: 'ltr';
 // Adds margin to left of column
 @mixin push-left($width: 1, $breakpoint: false) {
 
+	// Calculate the width of the margin
 	@if unit($width) == '%' { $margin-left: $width; }
 	@else if $width >= 1 { $margin-left: $width/$total_columns * 100%; }
 	@else { $margin-left: $width * 100%; }
@@ -162,6 +167,7 @@ $text_direction: 'ltr';
 // Adds margin to right of column
 @mixin push-right($width: 1, $breakpoint: false) {
 
+	// Calculate the width of the margin
 	@if unit($width) == '%' { $margin-right: $width; }
 	@else if $width >= 1 { $margin-right: $width/$total_columns * 100%; }
 	@else { $margin-right: $width * 100%; }
@@ -185,7 +191,7 @@ $text_direction: 'ltr';
 
 
 
-// Encloses columns in a wrapper prevent other columns from sitting on the same line
+// Encloses columns in a clearfixed wrapper, preventing other columns from sitting on the same line
 @mixin row() {
 	clear: both;
 	&:after {		
@@ -198,8 +204,11 @@ $text_direction: 'ltr';
 
 // Applies styles at specified breakpoint(s)
 @mixin breakpoint($min: $md, $max: false) {
+	// If two arguments are given:
 	@if $min and $max { @media (min-width: $min) and (max-width: $max) { @content } }
+	// Only max:
 	@else if $max { @media (max-width: $max) { @content } }
+	// Else, only min:
 	@else { @media (min-width: $min) { @content } }
 }
 

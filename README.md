@@ -3,25 +3,22 @@ orderly
 
 **The world's best, easiest, most flexible grid system.**
 
-For examples and more detailed information about Orderly, check out the [Orderly]() site or load up the demo on [CodePen](http://codepen.io/thomhines/pen/iIKcH) to try it out for yourself.
+Orderly is a simple, responsive grid system built for Sass. Orderly lets you create you grid how you want: fluid or fixed, fractional column or sub-column parts. And you're not limited to a set of predefined column widths—you can choose whatever column widths you'd like on the fly.
+
+Plus, Orderly uses Sass to keep your CSS simple, your HTML semantic, and give you an unbelievable amount of control over the layout of your site. Just add a line or two to your stylesheet and Orderly will do the rest.
 
 
-## Features
-
-- Uses both a grid-unit or fraction-based grid system. This means you can set a column to 1/4th the width of the container **OR** 3 grid-units wide of a 12-column grid, and end up with the same column! Plus, you can mix and match your units as much as you want.
-
-- Built with Sass to automate the heavy lifting - keeping your HTML semantic and your CSS clean and light.
-
-- Simple mixins make it a snap to control grid settings, even accross multiple responsive breakpoints.
-
-- Smart default settings make Orderly great right out of the box, but all settings can be easily adjusted and overwritten from within your .scss file.
+- [Official Site](http://projects.thomhines.com/orderly/)
+- [Interactive Demo](http://codepen.io/thomhines/pen/iIKcH) on [CodePen](http://codepen.io/)
 
 
 
 
 
 
-## How to Use: The Easy Way
+## How to Use
+
+Check out the example below to see how simple it is to get your grid started with Orderly. And head over to [Orderly](http://projects.thomhines.com/orderly/) site to see tons more settings and options.
 
 HTML:
 
@@ -44,12 +41,18 @@ SCSS:
 	}
 
 	.sidebar {
-		@include column(1/4);
+		@include column(25%);
 	}
 	
 	.main {
-		@include column(3/4);
+		@include column(75%);
 		
+	}
+
+or
+
+	.main {
+		@include column(3/4);
 	}
 
 or
@@ -58,7 +61,7 @@ or
 		@include column(.75);
 	}
 
-or
+or even
 
 	.main {
 		@include column(9);
@@ -66,7 +69,6 @@ or
 
 
 
-If you use whole numbers and default settings, orderly assumes you are setting the width of your column in grid-units. Otherwise, it will assume that the column width you set is a fraction of the total width of the container. 
+If you use whole numbers and default settings, orderly assumes you are setting the width of your column in sub-columns. Otherwise, it will assume that the column width you set is a fraction of the total width of the container. The default sub-column grid is 12 sub-columns wide.
 
-The default grid is 12 grid-units wide.
-
+Not sure how to use Sass in your project? Check out [cinch](projects.thomhines.com/cinch/).

@@ -105,18 +105,17 @@ $text_direction: 'ltr';
 	@if $text_direction == 'rtl' { float: right; }
 	@else { float: left; }
 	
-	// Calculate width of column
-	@if unit($width) == '%' { $_width: $width; }
-	@else if $width >= 1 { $_width: $width/$total_columns * 100%; }
-	@else { $_width: $width * 100%; }
-	
-	
+	// Set width of column
 	@if $breakpoint {
 		@media (max-width: getBreakpointValue($breakpoint)) {
-			width: $_width;
+			@if unit($width) == '%' { width: $width; }
+			@else if $width >= 1 { width: $width/$total_columns * 100%; }
+			@else { width: $width * 100%; }
 		}
 	} @else {
-		width: $_width;
+		@if unit($width) == '%' { width: $width; }
+		@else if $width >= 1 { width: $width/$total_columns * 100%; }
+		@else { width: $width * 100%; }
 		
 		@if $auto_break {
 			@media screen and (max-width: $go_to_single_column_breakpoint) {
@@ -140,19 +139,19 @@ $text_direction: 'ltr';
 // Adds margin to left of column
 @mixin push-left($width: 1, $breakpoint: false) {
 
-	// Calculate the width of the margin
-	@if unit($width) == '%' { $margin-left: $width; }
-	@else if $width >= 1 { $margin-left: $width/$total_columns * 100%; }
-	@else { $margin-left: $width * 100%; }
-
+	// Set the width of the margin
 	@if $breakpoint {
 		@media (max-width: getBreakpointValue($breakpoint)) {
-			margin-left: $margin-left;
+			@if unit($width) == '%' { margin-left: $width; }
+			@else if $width >= 1 { margin-left: $width/$total_columns * 100%; }
+			@else { margin-left: $width * 100%; }
 		}
 	} 
 	
 	@else {
-		margin-left: $margin-left;
+		@if unit($width) == '%' { margin-left: $width; }
+		@else if $width >= 1 { margin-left: $width/$total_columns * 100%; }
+		@else { margin-left: $width * 100%; }
 		
 		@if $auto_break {
 			@media (max-width: $go_to_single_column_breakpoint) {
@@ -167,19 +166,19 @@ $text_direction: 'ltr';
 // Adds margin to right of column
 @mixin push-right($width: 1, $breakpoint: false) {
 
-	// Calculate the width of the margin
-	@if unit($width) == '%' { $margin-right: $width; }
-	@else if $width >= 1 { $margin-right: $width/$total_columns * 100%; }
-	@else { $margin-right: $width * 100%; }
-
+	// Set the width of the margin
 	@if $breakpoint {
 		@media (max-width: getBreakpointValue($breakpoint)) {
-			margin-right: $margin-right;
+			@if unit($width) == '%' { margin-right: $width; }
+			@else if $width >= 1 { margin-right: $width/$total_columns * 100%; }
+			@else { margin-right: $width * 100%; }
 		}
 	}
 	
 	@else {
-		margin-right: $margin-right;
+		@if unit($width) == '%' { margin-right: $width; }
+		@else if $width >= 1 { margin-right: $width/$total_columns * 100%; }
+		@else { margin-right: $width * 100%; }
 		
 		@if $auto_break {
 			@media (max-width: $go_to_single_column_breakpoint) {

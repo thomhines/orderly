@@ -72,3 +72,12 @@ or even
 If you use whole numbers and default settings, orderly assumes you are setting the width of your column in sub-columns. Otherwise, it will assume that the column width you set is a fraction of the total width of its container. Orderly uses a 12 sub-column grid by default.
 
 Not sure how to use Sass in your project or you don't have node.js installed?? Check out [cinch](projects.thomhines.com/cinch/).
+
+
+
+## Changes
+
+#### v.1.1
+
+- Added "Width Indicator" option to make figuring out breakpoints a teeny bit easier
+- Changed format of mixin breakpoint arguments to use min and max values instead of just one breakpoint, and for range to be inclusive when using named breakpoints

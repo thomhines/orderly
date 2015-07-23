@@ -1,7 +1,7 @@
 /*----------------------------------------------------------------------*
 
 orderly
-v.1.0
+v.1.1
 https://github.com/thomhines/orderly
 
 created by Thom Hines
@@ -42,41 +42,64 @@ $go_to_single_column_breakpoint: $sm !default;
 // Sets direction of text content
 $text_direction: 'ltr';
 
+// Show browser width indicator
+$width_indicator: false !default;
+
 
 // HELPER FUNCTIONS
 //----------------------------------------------------------------------
 
 // Returns value of breakpoint
-@function getBreakpointValue($name) {
-	@if $name == 'xs' { @return $xs; }
-	@else if $name == 'sm' { @return $sm; }
-	@else if $name == 'md' { @return $md; }
-	@else if $name == 'lg' { @return $lg; }
-	@else if $name == 'xl' { @return $xl; }
+@function getBreakpointValue($name, $inclusive: null) {
+	@if $name == 'xs' or $name == $xs { 
+		@if $inclusive { @return 0; }
+		@else { @return $xs; }
+	}
+	@else if $name == 'sm' or $name == $sm { 
+		@if $inclusive { @return $xs; }
+		@else { @return $sm; }
+	}
+	@else if $name == 'md' or $name == $md { 
+		@if $inclusive { @return $sm; }
+		@else { @return $md; }
+	}
+	@else if $name == 'lg' or $name == $lg { 
+		@if $inclusive { @return $md; }
+		@else { @return $lg; }
+	}
+	@else if $name == 'xl' or $name == $xl { 
+		@if $inclusive { @return $lg; }
+		@else { @return $xl; }
+	}
 	@else { @return $name; }
 }
-
 
 
 // MIXINS
 //----------------------------------------------------------------------
 
 // Sets container properties
-@mixin container($width: $container_width, $breakpoint: false) {
+@mixin container($width: $container_width, $min: null, $max: null) {
+	
+	margin: auto;
 
-	@if $breakpoint {
-		@media (max-width: getBreakpointValue($breakpoint)) {
+	@if $max {
+		@media (min-width: getBreakpointValue($min, true)) and (max-width: getBreakpointValue($max))  {
 			width: $width + $gutter;
-			margin: auto;
+		}
+	} 
+	
+	@else if $min {
+		@media (max-width: getBreakpointValue($min)) {
+			width: $width + $gutter;
 		}
 	} 
 	
 	@else {
 		width: $width + $gutter;
-		margin: auto;
 		
 		@if $auto_break {
-			@if $breakpoint == false {
+			@if $min == null {
 				@media (max-width: $go_to_fluid_breakpoint) {
 					width: $fluid_width;
 					padding: 0 0 0 $gutter;
@@ -97,7 +120,7 @@ $text_direction: 'ltr';
 
 
 // Sets column properties
-@mixin column($width: $total_columns, $breakpoint: false) {
+@mixin column($width: $total_columns, $min: null, $max: null) {
 
 	padding: 0 $gutter 0 0;
 
@@ -106,13 +129,23 @@ $text_direction: 'ltr';
 	@else { float: left; }
 	
 	// Set width of column
-	@if $breakpoint {
-		@media (max-width: getBreakpointValue($breakpoint)) {
+	@if $max {
+		@media (min-width: getBreakpointValue($min, true)) and (max-width: getBreakpointValue($max)) {
 			@if unit($width) == '%' { width: $width; }
 			@else if $width >= 1 { width: $width/$total_columns * 100%; }
 			@else { width: $width * 100%; }
 		}
-	} @else {
+	} 
+	
+	@else if $min {
+		@media (max-width: getBreakpointValue($min)) {
+			@if unit($width) == '%' { width: $width; }
+			@else if $width >= 1 { width: $width/$total_columns * 100%; }
+			@else { width: $width * 100%; }
+		}
+	} 
+	
+	@else {
 		@if unit($width) == '%' { width: $width; }
 		@else if $width >= 1 { width: $width/$total_columns * 100%; }
 		@else { width: $width * 100%; }
@@ -137,11 +170,21 @@ $text_direction: 'ltr';
 
 
 // Adds margin to left of column
-@mixin push-left($width: 1, $breakpoint: false) {
+@mixin push-left($width: 1, $min: null, $max: null) {
 
 	// Set the width of the margin
-	@if $breakpoint {
-		@media (max-width: getBreakpointValue($breakpoint)) {
+	// If two breakpoints are given, set min and max widths
+	@if $max {
+		@media (min-width: getBreakpointValue($min, true)) and (max-width: getBreakpointValue($max)) {
+			@if unit($width) == '%' { margin-left: $width; }
+			@else if $width >= 1 { margin-left: $width/$total_columns * 100%; }
+			@else { margin-left: $width * 100%; }
+		}
+	} 
+	
+	// If just one, set only max width 
+	@else if $min {
+		@media (max-width: getBreakpointValue($min)) {
 			@if unit($width) == '%' { margin-left: $width; }
 			@else if $width >= 1 { margin-left: $width/$total_columns * 100%; }
 			@else { margin-left: $width * 100%; }
@@ -163,12 +206,25 @@ $text_direction: 'ltr';
 
 
 
+
+
 // Adds margin to right of column
-@mixin push-right($width: 1, $breakpoint: false) {
+@mixin push-right($width: 1, $min: null, $max: null) {
 
 	// Set the width of the margin
-	@if $breakpoint {
-		@media (max-width: getBreakpointValue($breakpoint)) {
+	
+	// If two breakpoints are given, set min and max widths
+	@if $max {
+		@media (min-width: getBreakpointValue($min, true)) and (max-width: getBreakpointValue($max)) {
+			@if unit($width) == '%' { margin-right: $width; }
+			@else if $width >= 1 { margin-right: $width/$total_columns * 100%; }
+			@else { margin-right: $width * 100%; }
+		}
+	}
+	
+	// If just one, set only max width 
+	@else if $min {
+		@media (max-width: getBreakpointValue($min)) {
 			@if unit($width) == '%' { margin-right: $width; }
 			@else if $width >= 1 { margin-right: $width/$total_columns * 100%; }
 			@else { margin-right: $width * 100%; }
@@ -202,30 +258,35 @@ $text_direction: 'ltr';
 
 
 // Applies styles at specified breakpoint(s)
-@mixin breakpoint($min: $md, $max: false) {
+@mixin breakpoint($min: null, $max: null) {
 	// If two arguments are given:
-	@if $min and $max { @media (min-width: $min) and (max-width: $max) { @content } }
-	// Only max:
-	@else if $max { @media (max-width: $max) { @content } }
-	// Else, only min:
-	@else { @media (min-width: $min) { @content } }
+	@if $max { @media (min-width: getBreakpointValue($min, true)) and (max-width: getBreakpointValue($max)) { @content } }
+	// Only one argument (treat as max):
+	@else if $min { @media (max-width: getBreakpointValue($min)) { @content } }
+	// Otherwise, use at smaller sizes:
+	@else { @media (min-width: 0) and (max-width: $go_to_single_column_breakpoint) { @content } }
 }
 
 
 // Hides content below a certain breakpoint
-@mixin hide($breakpoint: $go_to_single_column_breakpoint) {
-	@media (max-width: getBreakpointValue($breakpoint)) {
-		display: none; 
-	}
+@mixin hide($min: null, $max: null) {
+	// If two arguments are given:
+	@if $max { @media (min-width: getBreakpointValue($min, true)) and (max-width: getBreakpointValue($max)) { display: none; } }
+	// Only one argument (treat as max):
+	@else if $min { @media (max-width: getBreakpointValue($min)) { display: none; } }
+	// If there are no , hide at small sizes:
+	@else { @media (min-width: 0) and (max-width: $go_to_single_column_breakpoint) { display: none; } }
 }
 
 
-
 // Shows content below a certain breakpoint
-@mixin show($breakpoint: $go_to_single_column_breakpoint) {
-	@media (max-width: getBreakpointValue($breakpoint)) {
-		display: block; 
-	}
+@mixin show($min: null, $max: null) {
+	// If two arguments are given:
+	@if $max { @media (min-width: getBreakpointValue($min, true)) and (max-width: getBreakpointValue($max)) { display: block; } }
+	// Only one argument (treat as max):
+	@else if $min { @media (max-width: getBreakpointValue($min)) { display: block; } }
+	// If there are no, show at small sizes:
+	@else { @media (min-width: 0) and (max-width: $go_to_single_column_breakpoint) { display: block; } }
 }
 
 
@@ -243,6 +304,44 @@ $text_direction: 'ltr';
 		*zoom: 1;
 	}
 }
+
+// Add indicator to show how wide page is
+@mixin width-indicator() {
+	body::before {
+		position: fixed;
+		top: 30px;
+		right: 30px;
+		width: 40px;
+		padding: .4em;
+		font-size: 24px;
+		text-align: center;
+		background: #ff8361;
+		color: #fff;
+		z-index: 2000;
+	
+		content: 'XL';
+
+		@include breakpoint($lg) {
+			content: 'LG';
+		}
+		@include breakpoint($md) {
+			content: 'MD';
+		}
+		@include breakpoint($sm) {
+			content: 'SM';
+			font-size: 16px;
+		}
+		@include breakpoint($xs) {
+			content: 'XS';
+			font-size: 12px;
+		}
+	}
+}
+
+@if $width_indicator {
+	@include width-indicator();
+}
+
 
 
 
